@@ -1,0 +1,71 @@
+body{
+    font-family: 'Lucida Grande', Arial, sans-serif;
+    background-color: #fafafa;
+}
+
+a:hover{
+    cursor: pointer;
+}
+
+.main{
+    /*#margin-top: 1%;*/
+}
+
+circle{
+    r: 10;
+}
+
+circle:hover{
+    cursor: pointer;
+}
+
+.links path {
+    fill: none;
+    stroke: #aaa;
+    stroke-width: 2.5;
+}
+
+.link_label{
+    fill: black;
+    font-size: 12px;
+}
+
+marker {
+    fill: #aaa;
+}
+
+.links path:hover {
+    cursor: pointer;
+}
+
+.nodes circle {
+    pointer-events: all;
+    stroke: none;
+    stroke-width: 40px;
+}
+
+.node circle:hover{
+    cursor: pointer;
+}
+
+.link_labels text {
+    font-size: 10px;
+    fill: #000000;
+}
+
+.labels {
+    font-size: 12px;
+    fill: #424242;
+    font-weight: bold;
+}
+
+.plate{
+    border-radius: 10px;
+    background: #e0e0e0;
+    box-shadow:  20px 20px 60px #bebebe,
+    -20px -20px 60px #ffffff;
+}
+
+@media screen and (max-width: 600px){
+
+}

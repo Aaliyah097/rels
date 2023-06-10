@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Главная{% endblock %}
+
+
+{% block main %}
+<div id="graph" style="margin-top: 2%; margin-bottom: 5%" xmlns:v-on="http://www.w3.org/1999/xhtml">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">🔎</span>
+                <input type="text" class="form-control"
+                       placeholder="Имя узла или связи"
+                       aria-label="Имя узла или связи"
+                       aria-describedby="basic-addon1"
+                v-model="search_input">
+            </div>
+                <div id="graph_board" class="plate">
+                    <svg v-on:click="clearSelections"></svg>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <form @submit.prevent="createNode" class="plate" style="padding: 2% 2%;" method="post" action="/node/create/">
+                    <div class="mb-3">
+                        <h5>Создание узла</h5>
+                        <label for="new_node_name" class="form-label">Название узла</label>
+                        <input type="text" name="label" class="form-control" id="new_node_name">
+                    </div>
+                    <button type="submit" class="btn btn-success">Создать</button>
+                </form>
+                <br>
+                <form @submit.prevent="linkNodes" class="plate" style="padding: 2% 2%;" method="post" action="/node/link/">
+                    <div class="mb-3">
+                        <h5>Связка узлов</h5>
+                        <label for="new_link_name" class="form-label">Название связи</label>
+                        <input v-model="new_link_name" type="text" name="name" class="form-control" id="new_link_name">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="pair_node_1">первый узел</label>
+                                <select v-model="pair_node_1" class="form-select" id="pair_node_1">
+                                    <option v-for="option in graph.nodes" :value="option.title">
+                                        {{ option.title }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="pair_node_2">второй узел</label>
+                                <select v-model="pair_node_2" class="form-select" id="pair_node_2">
+                                    <option v-for="option in graph.nodes" :value="option.title">
+                                        {{ option.title }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Создать</button>
+                </form>
+                <br>
+                <h5>Текущий узел</h5>
+                <button :disabled="is_active_node" type="button" v-on:click="deleteNode" class="btn btn-danger">Удалить</button>
+                <button :disabled="is_active_node" type="button" v-on:click="getRouter" class="btn btn-warning">Маршрутизатор</button>
+                <button :disabled="is_active_node" type="button" v-on:click="selectRoute" class="btn btn-success">Цепь</button>
+                <br>
+                <button :disabled="is_active_node" style="margin-top: 5px" type="button" v-on:click="changeNodeTitle" class="btn btn-primary">Переименовать</button>
+                <br>
+                <br>
+                <h5>Текущая связь</h5>
+                <button :disabled="is_active_link" type="button" v-on:click="deleteLink" class="btn btn-danger">Удалить</button>
+<!--                <button :disabled="is_active_link" type="button" v-on:click="changeLinkTitle" class="btn btn-primary">Переименовать</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{%block links%}
+<!--js repository -->
+<script src="static/js/repository.js"></script>
+<!--vue component-->
+<script src="static/js/graph.vue"></script>
+{%endblock%}
