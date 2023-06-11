@@ -6,7 +6,7 @@
 <div id="graph" style="margin-top: 2%; margin-bottom: 5%" xmlns:v-on="http://www.w3.org/1999/xhtml">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">🔎</span>
                 <input type="text" class="form-control"
@@ -19,7 +19,7 @@
                     <svg v-on:click="clearSelections"></svg>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <form @submit.prevent="createNode" class="plate" style="padding: 2% 2%;" method="post" action="/node/create/">
                     <div class="mb-3">
                         <h5>Создание узла</h5>

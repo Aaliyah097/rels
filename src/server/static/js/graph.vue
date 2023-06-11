@@ -519,13 +519,13 @@ new Vue({
               .id(function (d) {
                 return d.id;
               })
-              //.distance(50)
-              //.strength(0.5)
+              .distance(300)
+              .strength(0.7)
           )
           .force("charge", d3.forceManyBody())
           .force("center", d3.forceCenter(this.width() / 2, this.height / 2))
           .force('collision', d3.forceCollide().radius(function(d){
-            return 150
+            return 100
           }));
 
       this.simulation
@@ -543,6 +543,7 @@ new Vue({
           .selectAll("circle")
           .data(this.graph.nodes)
           .enter().append("circle")
+          .attr('r', 10)
           .attr("fill", function (node) {return node.color})
           .attr("id", function(node) { return "node_" + node.id})
           .attr("name", function(node) { return node.title})
@@ -608,7 +609,7 @@ new Vue({
             return "#link_" + d.id;
           })
           .text(function(d, i) {
-            return d.cat + `(${d.id})`;
+            return d.cat;
           });
     },
     openNodeContextMenu(selectedNode){
@@ -621,7 +622,7 @@ new Vue({
           .selectAll("text")
           .data(this.graph.nodes)
           .enter().append("text")
-          .text(node => node.title + `(${node.id})`)
+          .text(node => node.title)
           // .attr("dx", 15)
           // .attr("dy", 7)
     },

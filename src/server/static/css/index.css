@@ -11,10 +11,6 @@ a:hover{
     /*#margin-top: 1%;*/
 }
 
-circle{
-    r: 10;
-}
-
 circle:hover{
     cursor: pointer;
 }
