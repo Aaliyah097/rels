@@ -33,10 +33,13 @@ def graph():
 def node_create():
     form = request.form
     label = form.get("label", None)
+    color = form.get("color", None)
+
     if label:
         create_node(
             space_name="Nodes",
             params={'title': label,
+                    'color': color,
                     'router': {}}
         )
     return "OK", 200
@@ -144,12 +147,14 @@ def node_rename():
 
     name = form.get('name', None)
     node_id = form.get("node", None)
+    color = form.get("color", None)
 
-    if name and node_id:
+    if name and node_id and color:
         change_node_name(
             space_name="Nodes",
             node_id=int(node_id),
-            name=name
+            name=name,
+            color=color
         )
 
     return "OK", 200

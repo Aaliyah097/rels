@@ -196,12 +196,13 @@ function get_route(node_id, link_id){
 }
 
 
-function rename_node(node_id, name){
+function rename_node(node_id, name, color){
     let csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
 
     let data = {
         "node": node_id,
-        "name": name
+        "name": name,
+        "color": color
     }
 
     $.ajax(

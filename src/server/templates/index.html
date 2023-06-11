@@ -25,6 +25,15 @@
                         <h5>Создание узла</h5>
                         <label for="new_node_name" class="form-label">Название узла</label>
                         <input type="text" name="label" class="form-control" id="new_node_name">
+                        <br>
+                        <label for="new_node_color" class="form-label">Цвет узла</label>
+                        <select class="form-select" id="new_node_color" name="color">
+                            <option value="#000000" style="color: #000000">Черный</option>
+                            <option value="#0D6EFD" style="color: #0D6EFD">Синий</option>
+                            <option value="#DC3545" style="color: #DC3545">Красный</option>
+<!--                            <option value="#198754" style="color: #198754">Зеленый</option>-->
+                            <option value="#FFC107" style="color: #FFC107">Желтый</option>
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-success">Создать</button>
                 </form>
@@ -61,7 +70,7 @@
                 <button :disabled="is_active_node" type="button" v-on:click="getRouter" class="btn btn-warning">Маршрутизатор</button>
                 <button :disabled="is_active_node" type="button" v-on:click="selectRoute" class="btn btn-success">Цепь</button>
                 <br>
-                <button :disabled="is_active_node" style="margin-top: 5px" type="button" v-on:click="changeNodeTitle" class="btn btn-primary">Переименовать</button>
+                <button :disabled="is_active_node" style="margin-top: 5px" type="button" v-on:click="changeNodeTitle" class="btn btn-primary">Редактировать</button>
                 <br>
                 <br>
                 <h5>Текущая связь</h5>

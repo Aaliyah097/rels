@@ -96,31 +96,64 @@ new Vue({
       name_el.type = "text";
       name_el.name = "node_new_name";
       name_el.id = "node_new_name";
+      name_el.value = this.selected_node.title;
 
       let modal_body = document.getElementById("modal_body");
       modal_body.innerHTML = "";
 
       let header = document.createElement("h5");
       header.textContent = "Новое имя"
-      modal_body.appendChild(header);
 
       let head_text = document.getElementById("modal_title");
       head_text.textContent = `Узел ${this.selected_node.title}`;
 
+      let color_header = document.createElement("h5");
+      color_header.textContent = "Новый цвет";
+
+      let new_color = document.createElement("select");
+      new_color.name = "node_new_color";
+      new_color.id = "node_new_color";
+      new_color.className = "form-select";
+      let colors = {
+        "Черный": "#000000",
+        "Синий": "#0D6EFD",
+        "Красный": "#DC3545",
+        "Желтый": "#FFC107"
+      }
+      for (let color in colors){
+        let option_el = document.createElement("option");
+        option_el.text = color;
+        option_el.value = colors[color];
+        option_el.style.color = colors[color];
+
+        if (colors[color] === this.selected_node.color){
+            option_el.selected = true;
+        }
+
+        new_color.appendChild(option_el)
+      }
+
       let create_button = document.createElement("button");
       create_button.className = "btn btn-success";
-      create_button.textContent = "Переименовать";
+      create_button.textContent = "Применить";
       create_button.type = "button";
       create_button.onclick = () => {
           rename_node(
               this.selected_node.id,
-              document.getElementById("node_new_name").value
+              document.getElementById("node_new_name").value,
+              document.getElementById("node_new_color").value
           )
       }
 
       let br = document.createElement("br");
+      let br2 = document.createElement("br");
 
+      modal_body.appendChild(header);
       modal_body.appendChild(name_el);
+      modal_body.appendChild(br);
+      modal_body.appendChild(br2);
+      modal_body.appendChild(color_header)
+      modal_body.appendChild(new_color);
       modal_body.appendChild(br);
       modal_body.appendChild(create_button);
 
@@ -411,7 +444,7 @@ new Vue({
         this.selected_node = null;
         this.selected_link = null;
 
-        this.nodes.attr('fill', "#000000");
+        this.nodes.attr('fill',function (node){ return node.color});
         this.links.attr('style', "stroke: #aaa");
         this.markers.attr('style', "fill: #aaa");
       }
@@ -510,6 +543,7 @@ new Vue({
           .selectAll("circle")
           .data(this.graph.nodes)
           .enter().append("circle")
+          .attr("fill", function (node) {return node.color})
           .attr("id", function(node) { return "node_" + node.id})
           .attr("name", function(node) { return node.title})
           .call(d3.drag()
@@ -644,7 +678,7 @@ new Vue({
           return "green";
         }
         else{
-          return "black";
+          return node.color;
         }
       })
     },

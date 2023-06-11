@@ -72,6 +72,3 @@ CREATE (n1)-[link:LinkName]->(n2)
 ###RUN
 **Run program**\
 `python main.py`
-
-<hr>"# rels" 
-"# rels" 

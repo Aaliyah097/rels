@@ -9,11 +9,13 @@ class Element:
     id: int
     title: str
     router: str
+    color: str
 
     @staticmethod
     def from_source(data: Node) -> 'Element':
         return Element(
             id=int(data.element_id),
             title=data._properties.get('title', None),
-            router=data._properties.get("router", None)
+            router=data._properties.get("router", None),
+            color=data._properties.get("color", None)
         )

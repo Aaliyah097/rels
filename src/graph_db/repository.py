@@ -170,8 +170,8 @@ def get_route(space_name: str, node_id: int, link_id: int) -> tuple[list[int], l
     return [n.id for n in node_moves], [l.id for l in link_moves]
 
 
-def change_node_name(space_name: str, node_id: int, name: str):
-    request = f"""MATCH (n:{space_name}) WHERE ID(n) = {node_id} SET n.title = '{name}'"""
+def change_node_name(space_name: str, node_id: int, name: str, color: str):
+    request = f"""MATCH (n:{space_name}) WHERE ID(n) = {node_id} SET n.title = '{name}', n.color='{color}'"""
 
     with Neo4jConnector(db_name='neo4j') as session:
         session.run(request)
