@@ -1,7 +1,7 @@
 from flask import render_template, request
 
-from src.server.app import app
-from src.server.graph_db.repository import (
+from app import app
+from graph_db.repository import (
     get_nodes_and_links,
     delete_node,
     create_node,
