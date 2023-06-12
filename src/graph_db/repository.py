@@ -1,5 +1,6 @@
 from __future__ import annotations
 from itertools import zip_longest
+from copy import deepcopy
 
 from .connector import Neo4jConnector
 from .element import Element
@@ -55,13 +56,15 @@ def delete_link(space_name: str, link_id: int):
             router = node._properties.get('router', {})
             router = dict(json.loads(router))
 
-            for_del_keys = []
-            for key, value in router.items():
-                if int(key) == link_id or int(value) == link_id:
-                    for_del_keys.append(key)
+            copy_router = deepcopy(router)
 
-            for key in for_del_keys:
-                del router[key]
+            for key in copy_router:
+                if int(key) == link_id:
+                    del router[key]
+                    continue
+                for value in copy_router[key]:
+                    if int(value) == link_id:
+                        router[key].remove(str(value))
 
             request = f"""MATCH (n:{space_name}) WHERE ID(n)={node.element_id} 
                                    SET n.router = '{json.dumps(router)}'
@@ -82,6 +85,11 @@ def create_node(space_name: str, params: dict):
 
 def link_nodes(space_name: str, first_node: int, second_node: int, link_name: str):
     link_name = link_name.replace(" ", "_")
+    try:
+        int(link_name)
+        return
+    except ValueError:
+        pass
     request = f"""
         MATCH (n1: {space_name}) WHERE ID(n1)={first_node} 
         MATCH (n2: {space_name}) WHERE ID(n2)={second_node}

@@ -553,9 +553,6 @@ new Vue({
           .enter().append("circle")
           .attr('r', 10)
           .attr("fill", function (node) {
-            // if (node.router === "{}"){
-            //   return "transparent"
-            // }
             return node.color
           })
           .style("stroke", function (node) {
