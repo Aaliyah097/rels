@@ -112,7 +112,11 @@ def add_router(space_name: str, node_id: int, in_link: int, out_link: int):
             router = node._properties.get('router', {})
             router = dict(json.loads(router))
 
-            router[str(in_link)] = str(out_link)
+            if str(in_link) not in router:
+                router[str(in_link)] = [str(out_link)]
+            else:
+                if str(out_link) not in router[str(in_link)]:
+                    router[str(in_link)].append(str(out_link))
 
             request = f"""MATCH (n:{space_name}) WHERE ID(n)={node_id} 
             SET n.router = '{json.dumps(router)}'
@@ -130,7 +134,12 @@ def delete_router(space_name: str, node_id: int, link_in_id: int, link_out_id: i
             router = node._properties.get('router', {})
             router = dict(json.loads(router))
 
-            del router[str(link_in_id)]
+            if str(link_in_id) in router:
+                if str(link_out_id) in router[str(link_in_id)]:
+                    router[str(link_in_id)].remove(str(link_out_id))
+
+            if len(router[str(link_in_id)]) == 0:
+                del router[str(link_in_id)]
 
             request = f"""MATCH (n:{space_name}) WHERE ID(n)={node_id} 
                         SET n.router = '{json.dumps(router)}'
@@ -147,28 +156,26 @@ def get_route(space_name: str, node_id: int, link_id: int) -> tuple[list[int], l
     node = [n for n in nodes if n.id == node_id][0]
     link = [l for l in links if l.id == link_id][0]
 
-    # истори\ перемещения по узлам и связям
-    node_moves = [node, ]
-    link_moves = [link, ]
+    visited_nodes = [node.id]
+    visited_links = []
 
-    current_link = link
+    def path(prev_l: Link):
+        if prev_l.id in visited_links:
+            return
+        visited_links.append(prev_l.id)
+        visited_nodes.append(prev_l.target_el.id)
 
-    while current_link:
-        # следующий узел от текущего
-        next_node = [n for n in nodes if n.id == current_link.target_el.id][0]
-        node_moves.append(next_node)
+        next_el = prev_l.target_el
+        router = dict(json.loads(next_el.router))
+        directions = router.get((str(prev_l.id)), [])
 
-        router = dict(json.loads(next_node.router))
-        next_link_id = router.get(str(current_link.id), None)
+        for d in directions:
+            next_link = [l for l in links if l.id == int(d)][0]
+            path(next_link)
 
-        if next_link_id:
-            next_link = [l for l in links if l.id == int(next_link_id) and l.source_el.id == next_node.id][0]
-            link_moves.append(next_link)
-            current_link = next_link
-        else:
-            current_link = None
+    path(link)
 
-    return [n.id for n in node_moves], [l.id for l in link_moves]
+    return visited_nodes, visited_links
 
 
 def change_node_name(space_name: str, node_id: int, name: str, color: str):

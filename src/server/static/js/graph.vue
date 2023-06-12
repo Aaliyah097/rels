@@ -201,7 +201,8 @@ new Vue({
       for (let i = 0; i< this.graph.links.length; i++) {
         if (this.graph.links[i].source.id === this.selected_node.id) {
           let option_el = document.createElement("option");
-          option_el.text = this.graph.links[i].cat;
+          option_el.text = this.graph.links[i].cat + " → " + this.graph.links[i].target_el.title;
+          option_el.value = this.graph.links[i].id;
           outgoing_select.add(option_el);
         }
       }
@@ -228,11 +229,11 @@ new Vue({
         return;
       }
 
-      let link_name = form.serializeArray()[0].value;
+      let link_id = Number(form.serializeArray()[0].value);
       let link = null;
 
       for (let i = 0; i < this.graph.links.length; i++){
-        if (this.graph.links[i].cat === link_name &&
+        if (this.graph.links[i].id === link_id &&
             this.graph.links[i].source.id === this.selected_node.id){
           link = this.graph.links[i];
         }
@@ -274,21 +275,23 @@ new Vue({
         return
       }
 
-      let incoming_link_name = form.serializeArray()[0].value;
+      let incoming_link_id = form.serializeArray()[0].value;
       let incoming_link = null;
-      let outgoing_link_name = form.serializeArray()[1].value;
+      let outgoing_link_id = form.serializeArray()[1].value;
       let outgoing_link = null;
 
       for (let i = 0; i < this.graph.links.length; i++){
-        if (this.graph.links[i].cat === incoming_link_name &&
+        if (this.graph.links[i].id === Number(incoming_link_id) &&
             this.graph.links[i].target.id === this.selected_node.id){
           incoming_link = this.graph.links[i];
         }
-        if (this.graph.links[i].cat === outgoing_link_name &&
+        if (this.graph.links[i].id === Number(outgoing_link_id) &&
             this.graph.links[i].source.id === this.selected_node.id){
           outgoing_link = this.graph.links[i];
         }
       }
+
+      console.log(incoming_link, outgoing_link)
       if (incoming_link != null && outgoing_link != null){
         add_router(
             this.selected_node.id,
@@ -312,40 +315,47 @@ new Vue({
       modal_body.appendChild(header);
 
       for (let key in router){
-        let route_el = document.createElement("input");
-        route_el.className = "form-control";
-        route_el.type = "text";
-        route_el.readOnly = true;
+        let value_links = router[key];
+        for (let j = 0; j < value_links.length; j++){
 
-        let key_link = this.get_link_by_id(key);
-        let value_link = this.get_link_by_id(router[key]);
+          let route_el = document.createElement("input");
+          route_el.className = "form-control";
+          route_el.type = "text";
+          route_el.readOnly = true;
 
-        if (!key_link || !value_link){
-          continue
+          let key_link = this.get_link_by_id(key);
+          console.log(router[key])
+
+          let value_link = this.get_link_by_id(value_links[j]);
+          console.log(value_link)
+
+          if (!key_link || !value_link){
+            continue
+          }
+
+          route_el.value = `${key_link.source_el.title} → ${key_link.cat} → ${value_link.source_el.title} → ${value_link.cat} → ${value_link.target_el.title}`;
+
+          let delete_link = document.createElement("a");
+          delete_link.href = "";
+          delete_link.style.color = "red";
+          delete_link.textContent = "удалить";
+          delete_link.onclick = () =>{
+            delete_router(
+                this.selected_node.id,
+                key_link.id,
+                value_link.id
+            )
+            return false;
+          };
+
+          let route_block = document.createElement("div");
+          route_block.id = `${this.selected_node.id}${key_link.id}${value_link.id}`;
+
+          route_block.appendChild(route_el);
+          route_block.appendChild(delete_link);
+
+          modal_body.appendChild(route_block);
         }
-
-        route_el.value = `${key_link.cat} → ${value_link.cat}`;
-
-        let delete_link = document.createElement("a");
-        delete_link.href = "";
-        delete_link.style.color = "red";
-        delete_link.textContent = "удалить";
-        delete_link.onclick = () =>{
-          delete_router(
-              this.selected_node.id,
-              key_link.id,
-              value_link.id
-          )
-          return false;
-        };
-
-        let route_block = document.createElement("div");
-        route_block.id = `${this.selected_node.id}${key_link.id}${value_link.id}`;
-
-        route_block.appendChild(route_el);
-        route_block.appendChild(delete_link);
-
-        modal_body.appendChild(route_block);
 
       }
 
@@ -375,14 +385,13 @@ new Vue({
 
 
       for (let i = 0; i< this.graph.links.length; i++) {
+        let option_el = document.createElement("option");
+        option_el.value = this.graph.links[i].id;
+        option_el.text = this.graph.links[i].source_el.title + " → " +  this.graph.links[i].cat + " → " + this.graph.links[i].target_el.title;
         if (this.graph.links[i].target.id === this.selected_node.id) {
-          let option_el = document.createElement("option");
-          option_el.text = this.graph.links[i].cat;
           incoming_select.add(option_el);
         }
         if (this.graph.links[i].source.id === this.selected_node.id) {
-          let option_el = document.createElement("option");
-          option_el.text = this.graph.links[i].cat;
           outgoing_select.add(option_el);
         }
       }
@@ -609,7 +618,7 @@ new Vue({
             return "#link_" + d.id;
           })
           .text(function(d, i) {
-            return d.cat;
+            return d.cat + " " + String(d.id);
           });
     },
     openNodeContextMenu(selectedNode){

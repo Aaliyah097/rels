@@ -1,3 +1,5 @@
+min python v. == 3.7
+
 ###CYPHER
 - create node
 - get node by id
