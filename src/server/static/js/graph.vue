@@ -117,7 +117,6 @@ new Vue({
       let colors = {
         "Черный": "#000000",
         "Синий": "#0D6EFD",
-        "Красный": "#DC3545",
         "Желтый": "#FFC107"
       }
       for (let color in colors){
@@ -553,7 +552,19 @@ new Vue({
           .data(this.graph.nodes)
           .enter().append("circle")
           .attr('r', 10)
-          .attr("fill", function (node) {return node.color})
+          .attr("fill", function (node) {
+            // if (node.router === "{}"){
+            //   return "transparent"
+            // }
+            return node.color
+          })
+          .style("stroke", function (node) {
+            if (node.router === "{}"){
+              return "red"
+            }
+            return node.color
+          })
+          .style("stroke-width", "2px")
           .attr("id", function(node) { return "node_" + node.id})
           .attr("name", function(node) { return node.title})
           .call(d3.drag()
