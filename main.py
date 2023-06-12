@@ -1,10 +1,3 @@
-from src.graph_db.repository import (
-    get_nodes_and_links
-)
-from src.server import app
-import sys
-
-
 __doc__ = "enter point"
 
 

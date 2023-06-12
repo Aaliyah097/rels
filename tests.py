@@ -1,10 +1,6 @@
 import unittest
 
-from src.graph_db import (
-    repository as graph_repo,
-    link,
-    element
-)
+from src.server.graph_db import element, repository as graph_repo, link
 
 
 class TestNeo4jRepo(unittest.TestCase):
