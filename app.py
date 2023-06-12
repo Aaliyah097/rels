@@ -22,4 +22,4 @@ app.config.from_mapping(config)
 cache = Cache(app)
 
 
-from .urls import *
+from src.server.urls import *
