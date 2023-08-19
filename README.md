@@ -23,13 +23,13 @@ On the diagram it is shown as 4 markers. The Stock point is a **router** used to
 - Move and zoom the canvas 
 
 
-##Dependencies
+## Dependencies
 - min python v. == 3.7
 - Neo4J
 - Vue.js
 - d3.js
 
-###CYPHER
+### CYPHER
 - create node
 - get node by id
 - link two nodes
@@ -71,7 +71,7 @@ CREATE (n1)-[link:LinkName]->(n2)
 
 <hr>
 
-###LINTER
+### LINTER
 
 **Execute check**\
 `pylint <folder or file name with extension>`
@@ -94,12 +94,12 @@ CREATE (n1)-[link:LinkName]->(n2)
 
 <hr>
 
-###TESTS
+### TESTS
 **Run tests**\
 `python tests.py`
 
 <hr>
 
-###RUN
+### RUN
 **Run program**\
 `python server/main.py`
