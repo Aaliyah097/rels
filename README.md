@@ -81,7 +81,7 @@ CREATE (n1)-[link:LinkName]->(n2)
  
 <hr>
  
-###VENV [Windows]
+### VENV [Windows]  
 **Activate**
 - on Windows: `venv/Scripts/activate`
 - on Linux: `source venv/bin/activate`
