@@ -1,6 +1,6 @@
 import unittest
 
-from server import link
+from server.graph_db import link
 from server.graph_db import element, repository as graph_repo
 
 

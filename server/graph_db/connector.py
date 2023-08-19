@@ -1,13 +1,23 @@
 import neo4j
 from neo4j import GraphDatabase
+from dotenv import load_dotenv
+import os
 
 
 class Neo4jConnector:
     def __init__(self, db_name: str,
-                 uri: str = "bolt://83.167.124.57:7687",
-                 user: str = "neo4j",
-                 password: str = "aaoem097"):
-        self.driver: neo4j.Driver = GraphDatabase.driver(uri=uri, auth=(user, password))
+                 uri: str = None,
+                 user: str = None,
+                 password: str = None):
+        load_dotenv()
+
+        self.driver: neo4j.Driver = GraphDatabase.driver(
+            uri=uri or os.environ.get("DB_URL"),
+            auth=(
+                user or os.environ.get("DB_USER"),
+                password or os.environ.get("PASSWORD")
+            )
+        )
         self.session: neo4j.Session | None = None
         self.db_name: str = db_name
 
